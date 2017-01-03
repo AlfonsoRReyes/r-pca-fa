@@ -1,0 +1,69 @@
+---
+title: "Wighted Least Square Factor Analysis"
+output: html_notebook
+---
+
+## 5.1.3 Weighted Least Squares Factor Analysis
+Similar to the minres approach of minimizing the squared residuals, factor method "wls"
+weights the squared residuals by their uniquenesses.  This tends to produce slightly smaller 
+overall residuals. In the example of weighted least squares, the output is shown by using the
+print function with the cut option set to 0. That is, all loadings are shown (Table 3).
+
+> Install psych and GPArotation packages.
+
+```{r}
+library(psych)
+
+data(Thurstone)
+
+f3t <- fa(Thurstone, 3, n.obs=213)
+f3t
+```
+
+#### Table 2:
+The 9 variable problem from Thurstone is a classic example of factoring where
+there is a higher order factor, g, that accounts for the correlation between the factors.  The
+extraction method was principal axis.  The transformation was a targeted transformation
+to a simple cluster solution.
+
+
+```{r}
+f3 <- fa(Thurstone, 3, n.obs = 213, fm="pa")
+f3o <- target.rot(f3)
+f3o
+```
+
+The unweighted least squares solution may be shown graphically using the `fa.plot` function which is called by the generic plot function (Figure 4).  Factors were transformed obliquely using a `oblimin`.  These solutions may be shown as item by factor plots (Figure 4) or by a structure diagram (Figure 5).
+
+```{r fig.asp=1}
+plot(f3t)
+```
+Figure 4:  A graphic representation of the 3 oblique factors from the Thurstone data using
+plot. Factors were transformed to an oblique solution using the oblimin function from the
+GPArotation package.
+
+#### Table 3:  
+The 9 variable problem from Thurstone is a classic example of factoring where
+there is a higher order factor, g, that accounts for the correlation between the factors.  The
+factors were extracted using a weighted least squares algorithm.  All loadings are shown by
+using the cut=0 option in the print.psych function.
+
+```{r}
+f3w <- fa(Thurstone, 3, n.obs = 213, fm="wls")
+print(f3w, cut=0, digits=3)
+```
+
+```{r fig.asp=0.75}
+fa.diagram(f3t)
+```
+Figure 5:  A graphic representation of the 3 oblique factors from the Thurstone data using
+`fa.diagram`.  Factors were transformed to an oblique solution using `oblimin`.
+
+A comparison of these three approaches suggests that the minres solution is more similar
+to  a  maximum  likelihood  solution  and fits  slightly  better  than  the  `pa`  or  `wls`  solutions. Comparisons with SPSS suggest that the pa solution matches the SPSS OLS solution, but
+that the minres solution is slightly better.  At least in one test data set, the weighted least
+squares solutions,  although  tting equally well,  had slightly di erent structure loadings.
+Note that the rotations used by SPSS will sometimes use the "Kaiser Normalization".  By
+default, the rotations used in psych do not normalize, but this can be speci ed as an option
+in fa.
+

@@ -1,0 +1,78 @@
+---
+title: "01 Introduction"
+output: html_notebook
+---
+
+```{r setup, include=FALSE, error=TRUE, message=FALSE, fig.asp=1}
+knitr::opts_chunk$set(echo = TRUE, comment = NA, error = TRUE)
+```
+
+## Basic descriptive statistics
+
+```{r}
+library(psych)
+
+data(sat.act)
+describe(sat.act)
+```
+
+## Correlational structure
+There  are  many  ways  to  display  correlations.   Tabular  displays  are  probably  the  most
+common.  The output from the cor function in core R is a rectangular matrix.
+lowerMat will  round  this  to  (2)  digits  and  then  display  as  a  lower  o   diagonal  matrix. lowerCor calls cor with use=`pairwise',  method=`pearson' as default values and returns (invisibly) the full correlation matrix and displays the lower o  diagonal matrix
+
+```{r}
+lowerCor(sat.act)
+```
+
+```{r fig.asp=1}
+pairs.panels(sat.act, pch='.')
+```
+Figure 1:  Using the pairs.panels function to graphically show relationships.  The x axis
+in each scatter plot represents the column variable, the y axis the row variable.  Note the
+extreme outlier for the ACT. The plot character was set to a period (pch='.')  in order to
+make a cleaner graph.
+
+```{r}
+female <- subset(sat.act,sat.act$gender==2)
+male <- subset(sat.act,sat.act$gender==1)
+lower <- lowerCor(male[-1])
+```
+
+```{r}
+upper <- lowerCor(female[-1])
+```
+
+```{r}
+both <- lowerUpper(lower,upper)
+round(both,2)
+```
+
+It is also possible to compare two matrices by taking their differences and displaying one (below the diagonal) and the difference of the second from the first above the diagonal
+
+```{r}
+diffs <-  lowerUpper(lower,upper,diff=TRUE)
+round(diffs,2)
+```
+
+## Heatmap displays of correlational structure
+
+```{r fig.asp=1}
+cor.plot(Thurstone,numbers=TRUE,main="9 cognitive variables from Thurstone")
+```
+Figure 2:  The structure of correlation matrix can be seen more clearly if the variables are
+grouped by factor and then the correlations are shown by color.  By using the 'numbers'
+option, the values are displayed as well.
+
+
+```{r fig.asp=1}
+circ <- sim.circ(24)
+r.circ <- cor(circ)
+cor.plot(r.circ,main='24 variables in a circumplex')
+```
+Figure 3: Using the cor.plot function to show the correlations in a circumplex.  Correlations
+are highest near the diagonal, diminish to zero further from the diagonal, and the increase
+again towards the corners of the matrix.  Circumplex structures are common in the study
+of affect.
+
+
