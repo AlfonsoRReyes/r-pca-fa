@@ -1,7 +1,13 @@
 ---
 title: "Wighted Least Square Factor Analysis"
-output: html_notebook
+output:
+  html_document: default
+  html_notebook: default
 ---
+
+```{r setup, include=FALSE, error=TRUE, message=FALSE, fig.asp=1}
+knitr::opts_chunk$set(echo = TRUE, comment = NA, error = TRUE)
+```
 
 ## 5.1.3 Weighted Least Squares Factor Analysis
 Similar to the minres approach of minimizing the squared residuals, factor method "wls"
