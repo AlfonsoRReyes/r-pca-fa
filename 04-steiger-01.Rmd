@@ -1,0 +1,100 @@
+---
+title: "Steiger 01"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+```{r setup, include=FALSE, error=TRUE, message=FALSE, fig.asp=1}
+knitr::opts_chunk$set(echo = TRUE, comment = NA, error = TRUE)
+```
+
+Source: https://github.com/andkov/Steiger_Multivariate/blob/master/functions/Steiger%20R%20Library%20Functions.txt
+
+PDF: http://www.statpower.net/Content/MLRM/R%20Stuff/R%20Library%20Functions%20for%20Multivariate%20Analysis.pdf
+
+
+```{r message=FALSE}
+library(Hmisc) 
+source("Steiger R Library Functions.R")
+```
+
+## Unit column vector
+```{r}
+UnitVector(5)
+UnitVector(3)
+```
+
+## Orthogonal projection of a matrix
+```{r}
+X <- matrix(c(2,4,2,1,3,1,3,1), 4, 2) 
+X
+X.ortho <- P(X) 
+X.ortho
+```
+
+$P(x)$
+```{r}
+X %*% solve((t(X) %*% X)) %*% t(X)
+```
+
+
+
+
+```{r}
+AthleticsData <- spss.get("AthleticsData.sav") 
+attach(AthleticsData) 
+
+names(AthleticsData) 
+```
+
+There are a number of discrepancy functions in use. Perhaps the most popular is the “maximum likelihood (ML)” discrepancy function. When ˆF and ˆU are chosen to minimize the ML discrepancy function, they are referred to as “maximum likelihood estimates.” 
+
+Maximum likelihood estimates are obtained by iteration, a process in which $\mathbf F$ and $\mathbf U$ are systematically altered to make the maximum likelihood discrepancy function get 
+smaller and smaller.  
+
+As discussed in the handout on “The Algebra of Factor Analysis,” for any 
+$\mathbf F$ in Equation (1.2), there are infinitely many alternative factor patterns that fit equally well. These are obtainable by “orthogonal” or “oblique” transformation. The process of 
+transforming a factor pattern is generally referred to as “rotation.”  There are many 
+methods of rotation. Two very popular methods are “varimax” rotation for orthogonal 
+factors and “promax” rotation for oblique factors. Both methods are implemented in R. 
+
+The `factanal` function fits a common factor model by the method of maximum 
+likelihood.  You can find out a bit about the function through the R help system. Note: 
+the function can analyze either raw data or a correlation or covariance matrix.  
+
+To begin with, let’s analyze the AthleticsData with a 2 factor model.  
+
+```{r}
+fit.2 <- factanal(AthleticsData,factors=2,rotation="varimax") 
+print(fit.2) 
+```
+
+Near the bottom of the output, we can see that the significance level of the $\chi^2$ fit statistic is very small. This indicates that the hypothesis of perfect model fit is rejected. Since we are in a purely exploratory vein, let’s fit a 3 factor model. 
+
+```{r}
+fit.3 <- factanal(AthleticsData,factors=3,rotation="varimax") 
+print(fit.3) 
+```
+
+These results are much more promising. Although the sample size is reasonably large, 
+N=1000N, the significance level of .373 indicates that the hypothesis of perfect fit cannot be rejected. Changing from two factors to three has produced a huge improvement.  
+
+We can “clean up” the factor pattern in several ways. One way is to hide small 
+loadings, to reduce the visual clutter in the factor pattern. Another is to reduce the 
+number of decimal places from 3 to 2. A third way is to sort the loadings to make the 
+simple structure more obvious. The following command does all three. 
+
+```{r}
+print(fit.3, digits = 2, cutoff = .2, sort = TRUE)
+```
+
+Now it is obvious that there are 3 factors.  The traditional approach to naming factors is as follows:  
+
+* Examine the variables that load heavily on the factor 
+
+* Try do decide what construct is common to these variables
+
+* Name the factor after that construct 
+
+
