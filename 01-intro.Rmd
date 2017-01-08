@@ -12,7 +12,17 @@ output:
 knitr::opts_chunk$set(echo = TRUE, comment = NA, error = TRUE)
 ```
 
-This notebook is based on this tutorial "How To:  Use the psych package for Factor Analysis and datar eduction"
+## Installation
+The concept of a “task view” has made downloading relevant packages very easy. For
+instance, the install.views("Psychometrics") command will download over 20 packages
+that do various types of psychometrics. To install the Psychometrics task view do:
+```
+>install.packages("ctv")
+>library(ctv)
+>install.views("Psychometrics")
+```
+
+This notebook is based on this tutorial "How To:  Use the psych package for Factor Analysis and datar eductaion".
 Link: http://personality-project.org/r/psych/HowTo/factor.pdf
 
 
@@ -85,5 +95,12 @@ Figure 3: Using the cor.plot function to show the correlations in a circumplex. 
 are highest near the diagonal, diminish to zero further from the diagonal, and the increase
 again towards the corners of the matrix.  Circumplex structures are common in the study
 of affect.
+
+```{r}
+library(psych)
+describe(person.data)
+
+```
+
 
 
